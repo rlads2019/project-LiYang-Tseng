@@ -1,0 +1,61 @@
+```{r}
+library(rvest)
+library(dplyr)
+library(stringr)
+library(tidytext)
+library(tidyr)
+library(ggplot2)
+```
+
+
+#爬文字檔，初步清理，存檔
+```{r}
+script <- read_html("https://www.springfieldspringfield.co.uk/movie_script.php?movie=captain-america-the-first-avenger")
+
+script <- script %>% html_node(".scrolling-script-container") %>% html_text() 
+
+write.table(script, file = "D:\\R_project\\HW13\\project-LiYang-Tseng\\src\\data\\origin\\xxx.txt")
+```
+
+
+#將文本斷成一句一列，輸出csv
+```{r}
+script <- readLines(choose.files())
+#script <- str_remove(script, "BOY: ")
+#script <- strsplit(script, "[0-9]\\.|[0-9][0-9]\\.|[0-9][0-9][0-9]\\.")
+#script <- strsplit(script, "[0-9]  |[0-9][0-9]   |[0-9][0-9][0-9]  ")
+script <- strsplit(script, "INT.|EXT.|INSERT.")
+script <- unlist(script[seq_along(script)])
+script <- data.frame(line = seq_along(script), content = script)
+write.csv(script, file = "D:\\R_project\\HW13\\project-LiYang-Tseng\\src\\data\\segment_data\\xxx.csv")
+```
+
+
+#讀取csv
+```{r}
+script <- read.csv(choose.files(), stringsAsFactors = F)
+
+#將文字處理成單詞
+script$content <- as.character(script$content)
+tidy_script <- script %>% unnest_tokens(word, content)
+```
+
+
+#觀察詞頻
+```{r}
+tidy_script %>% anti_join(stop_words) %>% count(word) %>% arrange(desc(n))
+```
+
+
+#整理停用詞
+```{r}
+custom_stop_words <- rbind(stop_words, data.frame(word = c( "somerset", "o.s", "oc", "tutorial", "v.o", "es", "ii", "sh", "est", "con'd", "int", "ext"), lexicon = c("custom")))
+```
+
+
+#進行情緒分析並輸出分析報告
+```{r}
+temp <- tidy_script %>% anti_join(custom_stop_words) %>% inner_join(get_sentiments("nrc")) %>% count(line, sentiment) %>% mutate(paragraph = (line %/% 5.9) + 1) %>% filter(sentiment != "positive" & sentiment != "negative")
+
+write.csv(temp, "D:\\R_project\\HW13\\project-LiYang-Tseng\\src\\data\\analysis_data\\[xx]xxx.csv")
+```

@@ -1,0 +1,169 @@
+```{r}
+library(dplyr)
+library(ggplot2)
+library(gganimate)
+library(animation)
+library(transformr)
+```
+
+#載入檔案
+```{r}
+American_Sniper <- read.csv("D://R_project//HW13//project-LiYang-Tseng//src//data//analysis_data//[Ac]American_Sniper.csv", stringsAsFactors = F)
+
+Braveheart <- read.csv("D://R_project//HW13//project-LiYang-Tseng//src//data//analysis_data//[Ac]Braveheart.csv", stringsAsFactors = F)
+
+Last_Samurai <- read.csv("D://R_project//HW13//project-LiYang-Tseng//src//data//analysis_data//[Ac]Last_Samurai.csv", stringsAsFactors = F)
+
+Pearl_Harbor <- read.csv("D://R_project//HW13//project-LiYang-Tseng//src//data//analysis_data//[Ac]Pearl_Harbor.csv", stringsAsFactors = F)
+
+Saving_Private_Ryan <- read.csv("D://R_project//HW13//project-LiYang-Tseng//src//data//analysis_data//[Ac]Saving_Private_Ryan.csv", stringsAsFactors = F)
+
+The_Patriot <- read.csv("D://R_project//HW13//project-LiYang-Tseng//src//data//analysis_data//[Ac]The_Patriot.csv", stringsAsFactors = F)
+```
+
+```{r}
+Seventeen_Again <- read.csv("D://R_project//HW13//project-LiYang-Tseng//src//data//analysis_data//[Rm]17_Again.csv", stringsAsFactors = F)
+
+Beauty_and_the_Beast <- read.csv("D://R_project//HW13//project-LiYang-Tseng//src//data//analysis_data//[Rm]Beauty_and_the_Beast.csv", stringsAsFactors = F)
+
+Date_Night <- read.csv("D://R_project//HW13//project-LiYang-Tseng//src//data//analysis_data//[Rm]Date_Night.csv", stringsAsFactors = F)
+
+The_Big_Sick <- read.csv("D://R_project//HW13//project-LiYang-Tseng//src//data//analysis_data//[Rm]The_Big_Sick.csv", stringsAsFactors = F)
+
+Titanic <- read.csv("D://R_project//HW13//project-LiYang-Tseng//src//data//analysis_data//[Rm]Titanic.csv", stringsAsFactors = F)
+
+Twilight <- read.csv("D://R_project//HW13//project-LiYang-Tseng//src//data//analysis_data//[Rm]Twilight.csv", stringsAsFactors = F)
+
+Twilight_New_Moon <- read.csv("D://R_project//HW13//project-LiYang-Tseng//src//data//analysis_data//[Rm]Twilight_New_Moon.csv", stringsAsFactors = F)
+```
+
+```{r}
+Black_Swan <- read.csv("D://R_project//HW13//project-LiYang-Tseng//src//data//analysis_data//[Sus]Black_Swan.csv", stringsAsFactors = F)
+
+Get_Out <- read.csv("D://R_project//HW13//project-LiYang-Tseng//src//data//analysis_data//[Sus]Get_Out.csv", stringsAsFactors = F)
+
+Misery <- read.csv("D://R_project//R_final//emotion_analysis//[Sus]Misery.csv", stringsAsFactors = F)
+
+Orphan <- read.csv("D://R_project//HW13//project-LiYang-Tseng//src//data//analysis_data//[Sus]Orphan.csv", stringsAsFactors = F)
+
+Phycho <- read.csv("D://R_project//R_final//emotion_analysis//[Sus]Phycho.csv", stringsAsFactors = F)
+
+Se7en <- read.csv("D://R_project//HW13//project-LiYang-Tseng//src//data//analysis_data//[Sus]Se7en.csv", stringsAsFactors = F)
+
+Silence_Of_The_Lambs <- read.csv("D://R_project//HW13//project-LiYang-Tseng//src//data//analysis_data//[Sus]Silence_Of_The_Lambs.csv", stringsAsFactors = F)
+```
+
+
+#設標籤作為合併資料的辨識依據
+```{r}
+American_Sniper <- cbind(American_Sniper, frame = rep("American_Sniper", length(American_Sniper$line)))
+Braveheart <- cbind(Braveheart, frame = rep("Braveheart", length(Braveheart$line)))
+Last_Samurai <- cbind(Last_Samurai, frame = rep("Last_Samurai", length(Last_Samurai$line)))
+Pearl_Harbor <- cbind(Pearl_Harbor, frame = rep("Pearl_Harbor", length(Pearl_Harbor$line)))
+Saving_Private_Ryan <- cbind(Saving_Private_Ryan, frame = rep("Saving_Private_Ryan", length(Saving_Private_Ryan$line)))
+The_Patriot <- cbind(The_Patriot, frame = rep("The_Patriot", length(The_Patriot$line)))
+```
+
+```{r}
+Seventeen_Again <- cbind(Seventeen_Again, frame = rep("Seventeen_Again", length(Seventeen_Again$line)))
+Beauty_and_the_Beast <- cbind(Beauty_and_the_Beast, frame = rep("Beauty_and_the_Beast", length(Beauty_and_the_Beast$line)))
+Date_Night <- cbind(Date_Night, frame = rep("Date_Night", length(Date_Night$line)))
+The_Big_Sick <- cbind(The_Big_Sick, frame = rep("The_Big_Sick", length(The_Big_Sick$line)))
+Titanic <- cbind(Titanic, frame = rep("Titanic", length(Titanic$line)))
+Twilight <- cbind(Twilight, frame = rep("Twilight", length(Twilight$line)))
+Twilight_New_Moon <- cbind(Twilight_New_Moon, frame = rep("Twilight_New_Moon", length(Twilight_New_Moon$line)))
+```
+
+```{r}
+Black_Swan <- cbind(Black_Swan, frame = rep("Black_Swan", length(Black_Swan$line)))
+Get_Out <- cbind(Get_Out, frame = rep("Get_Out", length(Get_Out$line)))
+Misery <- cbind(Misery, frame = rep("Misery", length(Misery$line)))
+Orphan <- cbind(Orphan, frame = rep("Orphan", length(Orphan$line)))
+Phycho <- cbind(Phycho, frame = rep("Phycho", length(Phycho$line)))
+Se7en <- cbind(Se7en, frame = rep("Se7en", length(Se7en$line)))
+Silence_Of_The_Lambs <- cbind(Silence_Of_The_Lambs, frame = rep("Silence_Of_The_Lambs", length(Silence_Of_The_Lambs$line)))
+```
+
+
+#預覽
+```{r}
+ggplot(American_Sniper, aes(x = paragraph, y = n, color = sentiment)) + geom_bar(stat = "identity") + facet_wrap(~sentiment, ncol = 3)
+
+ggplot(Braveheart, aes(x = paragraph, y = n, color = sentiment)) + geom_bar(stat = "identity") + facet_wrap(~sentiment, ncol = 3)
+
+ggplot(Last_Samurai, aes(x = paragraph, y = n, color = sentiment)) + geom_bar(stat = "identity") + facet_wrap(~sentiment, ncol = 3)
+
+ggplot(Pearl_Harbor, aes(x = paragraph, y = n, color = sentiment)) + geom_bar(stat = "identity") + facet_wrap(~sentiment, ncol = 3)
+
+ggplot(Saving_Private_Ryan, aes(x = paragraph, y = n, color = sentiment)) + geom_bar(stat = "identity") + facet_wrap(~sentiment, ncol = 3)
+
+ggplot(The_Patriot, aes(x = paragraph, y = n, color = sentiment)) + geom_bar(stat = "identity") + facet_wrap(~sentiment, ncol = 3)
+```
+
+```{r}
+ggplot(Seventeen_Again, aes(x = paragraph, y = n, color = sentiment)) + geom_bar(stat = "identity") + facet_wrap(~sentiment, ncol = 3)
+
+ggplot(Beauty_and_the_Beast, aes(x = paragraph, y = n, color = sentiment)) + geom_bar(stat = "identity") + facet_wrap(~sentiment, ncol = 3)
+
+ggplot(Date_Night, aes(x = paragraph, y = n, color = sentiment)) + geom_bar(stat = "identity") + facet_wrap(~sentiment, ncol = 3)
+
+ggplot(The_Big_Sick, aes(x = paragraph, y = n, color = sentiment)) + geom_bar(stat = "identity") + facet_wrap(~sentiment, ncol = 3)
+
+ggplot(Titanic, aes(x = paragraph, y = n, color = sentiment)) + geom_bar(stat = "identity") + facet_wrap(~sentiment, ncol = 3)
+
+ggplot(Twilight, aes(x = paragraph, y = n, color = sentiment)) + geom_bar(stat = "identity") + facet_wrap(~sentiment, ncol = 3)
+
+ggplot(Twilight_New_Moon, aes(x = paragraph, y = n, color = sentiment)) + geom_bar(stat = "identity") + facet_wrap(~sentiment, ncol = 3)
+```
+
+```{r}
+ggplot(Silence_Of_The_Lambs, aes(x = paragraph, y = n, color = sentiment)) + geom_bar(stat = "identity") + facet_wrap(~sentiment, ncol = 3)
+
+ggplot(Orphan, aes(x = paragraph, y = n, color = sentiment)) + geom_bar(stat = "identity") + facet_wrap(~sentiment, ncol = 3)
+
+ggplot(Misery, aes(x = paragraph, y = n, color = sentiment)) + geom_bar(stat = "identity") + facet_wrap(~sentiment, ncol = 3)
+
+ggplot(Get_Out, aes(x = paragraph, y = n, color = sentiment)) + geom_bar(stat = "identity") + facet_wrap(~sentiment, ncol = 3)
+
+ggplot(Black_Swan, aes(x = paragraph, y = n, color = sentiment)) + geom_bar(stat = "identity") + facet_wrap(~sentiment, ncol = 3)
+
+ggplot(Phycho, aes(x = paragraph, y = n, color = sentiment)) + geom_bar(stat = "identity") + facet_wrap(~sentiment, ncol = 3)
+
+ggplot(Se7en, aes(x = paragraph, y = n, color = sentiment)) + geom_bar(stat = "identity") + facet_wrap(~sentiment, ncol = 3)
+```
+
+
+#數值校正
+```{r}
+Last_Samurai <- Last_Samurai %>% mutate(n = n/2)
+Beauty_and_the_Beast <- Beauty_and_the_Beast %>% mutate(n = n/2)
+```
+
+
+#製成總表
+```{r}
+Action_Movie <- rbind(American_Sniper, Braveheart, Last_Samurai, Pearl_Harbor, Saving_Private_Ryan, The_Patriot)
+
+Romance_Movie <- rbind(Seventeen_Again, Beauty_and_the_Beast, Date_Night, The_Big_Sick, Titanic, Twilight, Twilight_New_Moon)
+
+Suspense_Movie <- rbind(Black_Swan, Get_Out, Misery, Orphan, Phycho, Se7en, Silence_Of_The_Lambs)
+```
+
+
+#動圖視覺
+```{r}
+ggplot(Action_Movie, aes(x = paragraph, y = n, color = sentiment)) + geom_bar(stat = "identity") + facet_wrap(~sentiment, ncol = 3) + theme_bw() + transition_states(frame, transition_length = 200, state_length = 500) + ease_aes("linear")
+
+ggplot(Romance_Movie, aes(x = paragraph, y = n, color = sentiment)) + geom_bar(stat = "identity") + facet_wrap(~sentiment, ncol = 3) + theme_bw() + transition_states(frame, transition_length = 200, state_length = 500) + ease_aes("linear")
+
+ggplot(Suspense_Movie, aes(x = paragraph, y = n, color = sentiment)) + geom_bar(stat = "identity") + facet_wrap(~sentiment, ncol = 3) + theme_bw() + transition_states(frame, transition_length = 200, state_length = 500) + ease_aes("linear")
+```
+
+```{r}
+ggplot(Action_Movie, aes(x = paragraph, y = n, color = sentiment)) + geom_bar(stat = "identity") + theme_bw() + transition_states(frame, transition_length = 400, state_length = 1000) + ease_aes("linear")
+
+ggplot(Romance_Movie, aes(x = paragraph, y = n, color = sentiment)) + geom_bar(stat = "identity") + theme_bw() + transition_states(frame, transition_length = 400, state_length = 1000) + ease_aes("linear")
+
+ggplot(Suspense_Movie, aes(x = paragraph, y = n, color = sentiment)) + geom_bar(stat = "identity") + theme_bw() + transition_states(frame, transition_length = 400, state_length = 1000) + ease_aes("linear")
+```
+
